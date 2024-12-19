@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gemini Screen Recorder</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        /* CSS Styles */
+        body {
+            background-color: #1E1E1E;
+            color: #FFFFFF;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #3498DB;
+        }
+        button {
+            background-color: #3498DB;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #2980B9;
+        }
+        textarea {
+            background-color: #333333;
+            color: #FFFFFF;
+            border: 1px solid #3498DB;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        #instructions {
+            width: 100%;
+            max-width: 600px;
+        }
+        #result {
+            background-color: #333333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow: auto;
+            max-width: 600px;
+            margin-top: 20px;
+            color: #FFFFFF;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .button-group {
+            margin-top: 20px;
+        }
+        .button-group button {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gemini Screen Recorder</h1>
+        <div class="button-group">
+            <button id="start-btn">Start Recording</button>
+            <button id="stop-btn">Stop Recording</button>
+        </div>
+        <br>
+        <textarea id="instructions" rows="4" cols="50" placeholder="Enter instructions for analysis..."></textarea><br>
+        <button id="analyze-btn">Analyze Recording</button>
+        <h2>Analysis Result:</h2>
+        <pre id="result">{{ result }}</pre>
+    </div>
+
+    <script>
+        $('#start-btn').click(function() {
+            $.get('/start_recording', function(data) {
+                alert(data.status);
+            });
+        });
+
+        $('#stop-btn').click(function() {
+            $.get('/stop_recording', function(data) {
+                alert(data.status);
+            });
+        });
+
+        $('#analyze-btn').click(function() {
+            var instructions = $('#instructions').val();
+            $.post('/analyze_recording', { instructions: instructions }, function(data) {
+                $('#result').text(data.result);
+            });
+        });
+    </script>
+</body>
+</html>
